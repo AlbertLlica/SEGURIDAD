@@ -3,57 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cifrado y Descifrado</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>INVESTIGACION FORMATIVA 3.2</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .container {
+            margin-top: 50px;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <h1>Cifrado y Descifrado</h1>
+        <di>
+            <h1 class="text-center mb-4">Investigacion Formativa 3.2</h1>
+        </di>
         
-        <!-- Sección de Cifrado -->
-        <div class="section">
-            <h2>Cifrado</h2>
-            <label for="cipher-method">Método de cifrado:</label>
-            <select id="cipher-method">
-                <option value="cesar">Cifrado César</option>
-                <option value="atbash">Cifrado Atbash</option>
-                <option value="transposicion-simple">Transposición Columnar Simple</option>
-                <option value="transposicion-doble">Transposición Columnar Doble</option>
-            </select>
-            
-            <textarea id="cipher-input" placeholder="Introduce el texto a cifrar..."></textarea>
-            
-            <!-- Desplazamiento para César -->
-            <input type="number" id="shift-value" placeholder="Desplazamiento para César">
-            
-            <!-- Claves para transposición -->
-            <input type="text" id="key-value" placeholder="Clave de Transposición">
-            <input type="text" id="key2-value" placeholder="Segunda Clave (solo para Transposición Doble)">
-            
-            <button onclick="encrypt()">Cifrar</button>
-            <p id="cipher-output" class="output"></p>
-        </div>
-        
-        <!-- Sección de Descifrado -->
-        <div class="section">
-            <h2>Descifrado</h2>
-            <label for="decipher-method">Método de descifrado:</label>
-            <select id="decipher-method">
-                <option value="transposicion-simple">Transposición Columnar Simple</option>
-                <option value="transposicion-doble">Transposición Columnar Doble</option>
-            </select>
-            
-            <textarea id="decipher-input" placeholder="Introduce el texto a descifrar..."></textarea>
-            
-            <!-- Claves para transposición -->
-            <input type="text" id="key-value-decipher" placeholder="Clave de Transposición">
-            <input type="text" id="key2-value-decipher" placeholder="Segunda Clave (solo para Transposición Doble)">
-            
-            <button onclick="decrypt()">Descifrar</button>
-            <p id="decipher-output" class="output"></p>
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <!-- Selección del Método de Cifrado -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Método de Cifrado</h5>
+                        <div class="mb-3">
+                            <label for="cipher-method" class="form-label">Selecciona el método:</label>
+                            <select id="cipher-method" class="form-select" onchange="toggleFields()">
+                                <option value="cesar">Cifrado César</option>
+                                <option value="atbash">Cifrado Atbash</option>
+                                <option value="transposicion-simple">Transposición Columnar Simple</option>
+                                <option value="transposicion-doble">Transposición Columnar Doble</option>
+                            </select>
+                        </div>
+
+                        <!-- Entrada de texto para cifrar -->
+                        <div class="mb-3">
+                            <textarea id="cipher-input" class="form-control" placeholder="Introduce el texto..."></textarea>
+                        </div>
+                        
+                        <!-- Desplazamiento para César -->
+                        <div class="mb-3" id="shift-field" style="display: none;">
+                            <label for="shift-value" class="form-label">Desplazamiento para César:</label>
+                            <input type="number" id="shift-value" class="form-control" placeholder="Desplazamiento">
+                        </div>
+
+                        <!-- Claves para Transposición -->
+                        <div class="mb-3" id="key1-field" style="display: none;">
+                            <label for="key-value" class="form-label">Clave de Transposición:</label>
+                            <input type="text" id="key-value" class="form-control" placeholder="Clave de Transposición">
+                        </div>
+                        <div class="mb-3" id="key2-field" style="display: none;">
+                            <label for="key2-value" class="form-label">Segunda Clave (solo para Transposición Doble):</label>
+                            <input type="text" id="key2-value" class="form-control" placeholder="Segunda Clave">
+                        </div>
+
+                        <!-- Botones de Cifrar y Descifrar -->
+                        <div class="d-flex justify-content-between">
+                            <button class="btn btn-primary" onclick="encrypt()">Cifrar</button>
+                            <button class="btn btn-secondary" onclick="decrypt()">Descifrar</button>
+                        </div>
+
+                        <!-- Resultado -->
+                        <p id="output" class="mt-4 alert alert-info" style="display: none;"></p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

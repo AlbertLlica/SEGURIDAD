@@ -1,3 +1,26 @@
+// Mostrar/ocultar campos según el método seleccionado
+function toggleFields() {
+    const method = document.getElementById("cipher-method").value;
+    const shiftField = document.getElementById("shift-field");
+    const key1Field = document.getElementById("key1-field");
+    const key2Field = document.getElementById("key2-field");
+
+    // Restablecer todos los campos
+    shiftField.style.display = "none";
+    key1Field.style.display = "none";
+    key2Field.style.display = "none";
+
+    // Mostrar campos según el método seleccionado
+    if (method === "cesar") {
+        shiftField.style.display = "block";
+    } else if (method === "transposicion-simple") {
+        key1Field.style.display = "block";
+    } else if (method === "transposicion-doble") {
+        key1Field.style.display = "block";
+        key2Field.style.display = "block";
+    }
+}
+
 // Cifrado César
 function caesarCipher(text, shift) {
     if (isNaN(shift) || shift < 1 || shift > 25) {
@@ -59,50 +82,6 @@ function transposicionDoble(text, key1, key2) {
     return transposicionSimple(firstPass, key2);
 }
 
-// Descifrado Transposición Columnar Simple
-function descifrarTransposicionSimple(text, key) {
-    if (!text || !key) {
-        throw new Error("El texto y la clave no pueden estar vacíos.");
-    }
-
-    let numCols = key.length;
-    let numRows = Math.ceil(text.length / numCols);
-    let grid = Array(numCols).fill("").map(() => []);
-    let colLengths = Array(numCols).fill(numRows);
-
-    // Ajuste para el último grupo de letras
-    let totalChars = text.length;
-    let extraChars = totalChars % numCols;
-    for (let i = extraChars; i < numCols; i++) {
-        colLengths[i]--;
-    }
-
-    let index = 0;
-    for (let i = 0; i < key.length; i++) {
-        let colIndex = parseInt(key[i]) - 1;
-        for (let j = 0; j < colLengths[colIndex]; j++) {
-            grid[colIndex].push(text[index++]);
-        }
-    }
-
-    // Leer filas
-    let result = [];
-    for (let row = 0; row < numRows; row++) {
-        for (let col = 0; col < numCols; col++) {
-            if (grid[col][row]) {
-                result.push(grid[col][row]);
-            }
-        }
-    }
-    return result.join('');
-}
-
-// Descifrado Transposición Columnar Doble
-function descifrarTransposicionDoble(text, key1, key2) {
-    let firstPass = descifrarTransposicionSimple(text, key2);
-    return descifrarTransposicionSimple(firstPass, key1);
-}
-
 // Manejo de cifrado
 function encrypt() {
     try {
@@ -110,7 +89,7 @@ function encrypt() {
         const inputText = document.getElementById("cipher-input").value.trim();
 
         if (!inputText) {
-            throw new Error("El campo de texto a cifrar no puede estar vacío.");
+            throw new Error("El campo de texto no puede estar vacío.");
         }
 
         let outputText = "";
@@ -118,7 +97,7 @@ function encrypt() {
         if (method === "cesar") {
             const shift = parseInt(document.getElementById("shift-value").value);
             if (isNaN(shift)) {
-                throw new Error("Por favor, introduce un valor de desplazamiento válido.");
+                throw new Error("Introduce un valor de desplazamiento válido.");
             }
             outputText = caesarCipher(inputText, shift);
         } else if (method === "atbash") {
@@ -126,52 +105,20 @@ function encrypt() {
         } else if (method === "transposicion-simple") {
             const key = document.getElementById("key-value").value.trim();
             if (!key) {
-                throw new Error("Por favor, introduce una clave de transposición.");
+                throw new Error("Introduce una clave de transposición.");
             }
             outputText = transposicionSimple(inputText, key);
         } else if (method === "transposicion-doble") {
             const key1 = document.getElementById("key-value").value.trim();
             const key2 = document.getElementById("key2-value").value.trim();
             if (!key1 || !key2) {
-                throw new Error("Por favor, introduce ambas claves de transposición.");
+                throw new Error("Introduce ambas claves de transposición.");
             }
             outputText = transposicionDoble(inputText, key1, key2);
         }
 
-        document.getElementById("cipher-output").textContent = outputText;
-    } catch (error) {
-        alert(`Error: ${error.message}`);
-    }
-}
-
-// Manejo de descifrado
-function decrypt() {
-    try {
-        const method = document.getElementById("decipher-method").value;
-        const inputText = document.getElementById("decipher-input").value.trim();
-
-        if (!inputText) {
-            throw new Error("El campo de texto a descifrar no puede estar vacío.");
-        }
-
-        let outputText = "";
-
-        if (method === "transposicion-simple") {
-            const key = document.getElementById("key-value-decipher").value.trim();
-            if (!key) {
-                throw new Error("Por favor, introduce una clave de transposición.");
-            }
-            outputText = descifrarTransposicionSimple(inputText, key);
-        } else if (method === "transposicion-doble") {
-            const key1 = document.getElementById("key-value-decipher").value.trim();
-            const key2 = document.getElementById("key2-value-decipher").value.trim();
-            if (!key1 || !key2) {
-                throw new Error("Por favor, introduce ambas claves de transposición.");
-            }
-            outputText = descifrarTransposicionDoble(inputText, key1, key2);
-        }
-
-        document.getElementById("decipher-output").textContent = outputText;
+        document.getElementById("output").style.display = "block";
+        document.getElementById("output").textContent = outputText;
     } catch (error) {
         alert(`Error: ${error.message}`);
     }
