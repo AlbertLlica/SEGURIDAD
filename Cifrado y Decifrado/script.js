@@ -123,3 +123,88 @@ function encrypt() {
         alert(`Error: ${error.message}`);
     }
 }
+
+// Manejo de descifrado
+function decrypt() {
+    try {
+        const method = document.getElementById("cipher-method").value;
+        const inputText = document.getElementById("cipher-input").value.trim();
+
+        if (!inputText) {
+            throw new Error("El campo de texto no puede estar vacío.");
+        }
+
+        let outputText = "";
+
+        if (method === "cesar") {
+            // Para descifrar el César, restamos el desplazamiento en lugar de sumarlo
+            const shift = parseInt(document.getElementById("shift-value").value);
+            if (isNaN(shift)) {
+                throw new Error("Introduce un valor de desplazamiento válido.");
+            }
+            outputText = caesarCipher(inputText, 26 - shift); // Desplazamiento inverso
+        } else if (method === "atbash") {
+            // Atbash es auto-inverso, por lo que usamos la misma función para descifrar
+            outputText = atbashCipher(inputText);
+        } else if (method === "transposicion-simple") {
+            const key = document.getElementById("key-value").value.trim();
+            if (!key) {
+                throw new Error("Introduce una clave de transposición.");
+            }
+            outputText = descifrarTransposicionSimple(inputText, key);
+        } else if (method === "transposicion-doble") {
+            const key1 = document.getElementById("key-value").value.trim();
+            const key2 = document.getElementById("key2-value").value.trim();
+            if (!key1 || !key2) {
+                throw new Error("Introduce ambas claves de transposición.");
+            }
+            outputText = descifrarTransposicionDoble(inputText, key1, key2);
+        }
+
+        // Mostrar el resultado
+        document.getElementById("output").style.display = "block";
+        document.getElementById("output").textContent = outputText;
+    } catch (error) {
+        alert(`Error: ${error.message}`);
+    }
+}
+
+// Función para descifrar la Transposición Columnar Simple
+function descifrarTransposicionSimple(text, key) {
+    let numCols = key.length;
+    let numRows = Math.ceil(text.length / numCols);
+    let grid = Array(numCols).fill("").map(() => []);
+    let colLengths = Array(numCols).fill(numRows);
+
+    // Ajustar para el último grupo de letras
+    let totalChars = text.length;
+    let extraChars = totalChars % numCols;
+    for (let i = extraChars; i < numCols; i++) {
+        colLengths[i]--;
+    }
+
+    let index = 0;
+    for (let i = 0; i < key.length; i++) {
+        let colIndex = parseInt(key[i]) - 1;
+        for (let j = 0; j < colLengths[colIndex]; j++) {
+            grid[colIndex].push(text[index++]);
+        }
+    }
+
+    // Leer por filas
+    let result = [];
+    for (let row = 0; row < numRows; row++) {
+        for (let col = 0; col < numCols; col++) {
+            if (grid[col][row]) {
+                result.push(grid[col][row]);
+            }
+        }
+    }
+    return result.join('');
+}
+
+// Función para descifrar la Transposición Columnar Doble
+function descifrarTransposicionDoble(text, key1, key2) {
+    let firstPass = descifrarTransposicionSimple(text, key2);
+    return descifrarTransposicionSimple(firstPass, key1);
+}
