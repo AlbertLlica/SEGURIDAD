@@ -34,23 +34,50 @@ function transposicionSimple(text, key) {
     if (!text || !key) {
         throw new Error("El texto y la clave no pueden estar vacíos.");
     }
-
+    text = text.replace(/\s/g, '');
     let numCols = key.length;
     let numRows = Math.ceil(text.length / numCols);
-    let grid = Array(numCols).fill("").map(() => []);
 
-    for (let i = 0; i < text.length; i++) {
-        grid[i % numCols].push(text[i]);
-    }
-
+    // Crear una matriz vacía (grid) para representar las columnas
+    let grid = Array(numRows).fill("").map(() => Array(numCols).fill(""));
+    
+    // Llenar la matriz con los caracteres del texto
+    let index = 0;
+    for (let row = 0; row < numRows; row++) {
+        for (let col = 0; col < numCols; col++) {
+            
+                if (index < text.length) {
+                    grid[row][col] = text[index++];
+                } else {
+                    grid[row][col] = '-';  // Rellenar con caracteres de relleno si es necesario
+                }
+            }
+            
+        }
+    
+    console.log(grid)
     // Reordenar columnas según la clave
-    let orderedGrid = [];
+    let keyValuePairs = [];
     for (let i = 0; i < key.length; i++) {
-        let colIndex = parseInt(key[i]) - 1;
-        orderedGrid.push(grid[colIndex]);
+        keyValuePairs.push([key[i], i]);
     }
 
-    return orderedGrid.flat().join('');
+    // Ordenar los pares por el valor de la clave (primer elemento)
+    keyValuePairs.sort((a, b) => a[0] - b[0]);
+
+    // Reordenar las columnas según la clave ordenada
+    let orderedGrid = [];
+    keyValuePairs.forEach(pair => {
+        let colIndex = pair[1];  // Tomar el índice original
+        for (let row = 0; row < numRows; row++) {
+            orderedGrid.push(grid[row][colIndex]);
+        }
+    });
+
+    console.log(orderedGrid)
+    return orderedGrid.join('');
+    
+   
 }
 
 // Transposición Columnar Doble
@@ -60,41 +87,48 @@ function transposicionDoble(text, key1, key2) {
 }
 
 // Descifrado Transposición Columnar Simple
-function descifrarTransposicionSimple(text, key) {
-    if (!text || !key) {
-        throw new Error("El texto y la clave no pueden estar vacíos.");
+function descifrarTransposicionSimple(cipherText, key) {
+    if (!cipherText || !key) {
+        throw new Error("El texto cifrado y la clave no pueden estar vacíos.");
     }
 
     let numCols = key.length;
-    let numRows = Math.ceil(text.length / numCols);
-    let grid = Array(numCols).fill("").map(() => []);
-    let colLengths = Array(numCols).fill(numRows);
+    let numRows = Math.ceil(cipherText.length / numCols);
 
-    // Ajuste para el último grupo de letras
-    let totalChars = text.length;
-    let extraChars = totalChars % numCols;
-    for (let i = extraChars; i < numCols; i++) {
-        colLengths[i]--;
-    }
+    // Crear una matriz vacía para el texto cifrado
+    let grid = Array(numRows).fill("").map(() => Array(numCols).fill(""));
 
-    let index = 0;
+    // Crear un array con pares [valor de la clave, índice original]
+    let keyValuePairs = [];
     for (let i = 0; i < key.length; i++) {
-        let colIndex = parseInt(key[i]) - 1;
-        for (let j = 0; j < colLengths[colIndex]; j++) {
-            grid[colIndex].push(text[index++]);
-        }
+        keyValuePairs.push([key[i], i]);
     }
 
-    // Leer filas
-    let result = [];
+    // Ordenar los pares por el valor de la clave (primer elemento)
+    keyValuePairs.sort((a, b) => a[0] - b[0]);
+
+    // Rellenar las columnas del grid en el orden de la clave ordenada
+    let index = 0;
+    keyValuePairs.forEach(pair => {
+        let colIndex = pair[1];  // Tomar el índice original
+        for (let row = 0; row < numRows; row++) {
+            if (index < cipherText.length) {
+                grid[row][colIndex] = cipherText[index++];
+            }
+        }
+    });
+
+    // Leer las filas para obtener el texto descifrado
+    let decryptedText = [];
     for (let row = 0; row < numRows; row++) {
         for (let col = 0; col < numCols; col++) {
-            if (grid[col][row]) {
-                result.push(grid[col][row]);
+            if (grid[row][col] !== '-') {  // Ignorar caracteres de relleno
+                decryptedText.push(grid[row][col]);
             }
         }
     }
-    return result.join('');
+
+    return decryptedText.join('');
 }
 
 // Descifrado Transposición Columnar Doble
