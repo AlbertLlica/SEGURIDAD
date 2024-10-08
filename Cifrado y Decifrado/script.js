@@ -21,20 +21,37 @@ function toggleFields() {
     }
 }
 
+// Función para eliminar tildes y símbolos no deseados
+function limpiarTexto(text) {
+    // Normalizar texto para eliminar tildes
+    text = text.normalize("NFD").replace(/[\u0300-\u036f]/g, ""); // Remueve tildes
+
+    // Remover caracteres especiales, pero mantener letras, números y espacios
+    return text.replace(/[^a-zA-Z0-9\s]/g, ""); 
+}
+
 // Cifrado César
 function caesarCipher(text, shift) {
     if (isNaN(shift) || shift < 1 || shift > 25) {
         throw new Error("El valor de desplazamiento debe estar entre 1 y 25.");
     }
+
+    // Primero limpiamos el texto
+    text = limpiarTexto(text);
+
+    // Luego aplicamos el cifrado César
     return text.split('').map(char => {
         let code = char.charCodeAt(0);
 
-        if (code >= 65 && code <= 90) { // Mayúsculas
+        // Cifrar letras mayúsculas (A-Z)
+        if (code >= 65 && code <= 90) {
             return String.fromCharCode(((code - 65 + shift) % 26) + 65);
-        } else if (code >= 97 && code <= 122) { // Minúsculas
+        }
+        // Cifrar letras minúsculas (a-z)
+        else if (code >= 97 && code <= 122) {
             return String.fromCharCode(((code - 97 + shift) % 26) + 97);
         }
-        return char; // Mantener otros caracteres
+        return char; // Mantener otros caracteres (como espacios)
     }).join('');
 }
 
