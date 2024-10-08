@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cifrado y Descifrado</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Cifrado y Descifrado</h1>
+        
+        <!-- Sección de Cifrado -->
+        <div class="section">
+            <h2>Cifrado</h2>
+            <label for="cipher-method">Método de cifrado:</label>
+            <select id="cipher-method">
+                <option value="cesar">Cifrado César</option>
+                <option value="atbash">Cifrado Atbash</option>
+                <option value="transposicion-simple">Transposición Columnar Simple</option>
+                <option value="transposicion-doble">Transposición Columnar Doble</option>
+            </select>
+            
+            <textarea id="cipher-input" placeholder="Introduce el texto a cifrar..."></textarea>
+            
+            <!-- Desplazamiento para César -->
+            <input type="number" id="shift-value" placeholder="Desplazamiento para César">
+            
+            <!-- Claves para transposición -->
+            <input type="text" id="key-value" placeholder="Clave de Transposición">
+            <input type="text" id="key2-value" placeholder="Segunda Clave (solo para Transposición Doble)">
+            
+            <button onclick="encrypt()">Cifrar</button>
+            <p id="cipher-output" class="output"></p>
+        </div>
+        
+        <!-- Sección de Descifrado -->
+        <div class="section">
+            <h2>Descifrado</h2>
+            <label for="decipher-method">Método de descifrado:</label>
+            <select id="decipher-method">
+                <option value="transposicion-simple">Transposición Columnar Simple</option>
+                <option value="transposicion-doble">Transposición Columnar Doble</option>
+            </select>
+            
+            <textarea id="decipher-input" placeholder="Introduce el texto a descifrar..."></textarea>
+            
+            <!-- Claves para transposición -->
+            <input type="text" id="key-value-decipher" placeholder="Clave de Transposición">
+            <input type="text" id="key2-value-decipher" placeholder="Segunda Clave (solo para Transposición Doble)">
+            
+            <button onclick="decrypt()">Descifrar</button>
+            <p id="decipher-output" class="output"></p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
