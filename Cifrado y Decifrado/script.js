@@ -86,7 +86,7 @@ function transposicionDoble(text, key1, key2) {
 function encrypt() {
     try {
         const method = document.getElementById("cipher-method").value;
-        const inputText = document.getElementById("cipher-input").value.trim();
+        const inputText = document.getElementById("cipher-input").value; // Quitar .trim()
 
         if (!inputText) {
             throw new Error("El campo de texto no puede estar vacío.");
@@ -117,18 +117,18 @@ function encrypt() {
             outputText = transposicionDoble(inputText, key1, key2);
         }
 
+        // Mostrar el resultado respetando los saltos de línea
         document.getElementById("output").style.display = "block";
-        document.getElementById("output").textContent = outputText;
+        document.getElementById("output").innerHTML = outputText.replace(/\n/g, "<br>");
     } catch (error) {
         alert(`Error: ${error.message}`);
     }
 }
-
 // Manejo de descifrado
 function decrypt() {
     try {
         const method = document.getElementById("cipher-method").value;
-        const inputText = document.getElementById("cipher-input").value.trim();
+        const inputText = document.getElementById("cipher-input").value; // Quitar .trim()
 
         if (!inputText) {
             throw new Error("El campo de texto no puede estar vacío.");
@@ -137,15 +137,13 @@ function decrypt() {
         let outputText = "";
 
         if (method === "cesar") {
-            // Para descifrar el César, restamos el desplazamiento en lugar de sumarlo
             const shift = parseInt(document.getElementById("shift-value").value);
             if (isNaN(shift)) {
                 throw new Error("Introduce un valor de desplazamiento válido.");
             }
             outputText = caesarCipher(inputText, 26 - shift); // Desplazamiento inverso
         } else if (method === "atbash") {
-            // Atbash es auto-inverso, por lo que usamos la misma función para descifrar
-            outputText = atbashCipher(inputText);
+            outputText = atbashCipher(inputText); // Atbash es auto-inverso
         } else if (method === "transposicion-simple") {
             const key = document.getElementById("key-value").value.trim();
             if (!key) {
@@ -161,9 +159,9 @@ function decrypt() {
             outputText = descifrarTransposicionDoble(inputText, key1, key2);
         }
 
-        // Mostrar el resultado
+        // Mostrar el resultado respetando los saltos de línea
         document.getElementById("output").style.display = "block";
-        document.getElementById("output").textContent = outputText;
+        document.getElementById("output").innerHTML = outputText.replace(/\n/g, "<br>");
     } catch (error) {
         alert(`Error: ${error.message}`);
     }

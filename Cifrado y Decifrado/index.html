@@ -42,7 +42,7 @@
                         <!-- Desplazamiento para César -->
                         <div class="mb-3" id="shift-field" style="display: none;">
                             <label for="shift-value" class="form-label">Desplazamiento para César:</label>
-                            <input type="number" id="shift-value" class="form-control" placeholder="Desplazamiento">
+                            <input type="number" id="shift-value" class="form-control" placeholder="Clave de Cesar">
                         </div>
 
                         <!-- Claves para Transposición -->
@@ -60,6 +60,9 @@
                             <button class="btn btn-primary" onclick="encrypt()">Cifrar</button>
                             <button class="btn btn-secondary" onclick="decrypt()">Descifrar</button>
                         </div>
+                        
+                        <!-- Cambia el <p> por un <pre> -->
+                        <pre id="output" class="mt-4 alert alert-info" style="display: none;"></pre>
 
                         <!-- Resultado -->
                         <p id="output" class="mt-4 alert alert-info" style="display: none;"></p>

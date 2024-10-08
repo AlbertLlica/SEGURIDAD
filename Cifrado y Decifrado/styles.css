@@ -103,3 +103,11 @@ button:hover {
     min-height: 40px;
     border: 1px solid #bdc3c7;
 }
+
+
+#output {
+    white-space: pre-wrap; /* Preserva los saltos de línea y espacios */
+    background-color: #f0f0f0; /* Fondo gris claro para resaltar el texto */
+    padding: 10px; /* Añade un padding para que el texto no esté pegado al borde */
+    border-radius: 5px; /* Bordes redondeados */
+}
