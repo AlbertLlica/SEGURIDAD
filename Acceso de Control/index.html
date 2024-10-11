@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Sistema de Control de Acceso</title>
+        <link rel="stylesheet" href="styles.css">
+    </head>
+<body>
+
+<div class="container">
+    <h1>Control de Acceso por Roles</h1>
+
+    <p>Seleccione un usuario y el documento al que desea acceder:</p>
+
+    <label for="employee">Usuario:</label>
+    <select id="employee">
+        <option value="Director Ejecutivo">Director Ejecutivo</option>
+        <option value="Jefe de Proyectos">Jefe de Proyectos</option>
+        <option value="Analista">Analista</option>
+        <option value="Asistente Administrativo">Asistente Administrativo</option>
+        <option value="Consultor Externo">Consultor Externo</option>
+    </select>
+
+    <label for="document">Documento:</label>
+    <select id="document">
+        <option value="Confidencial">Reporte Confidencial</option>
+        <option value="Sensitivo">Plan Estratégico</option>
+        <option value="Restrictivo">Resumen Financiero</option>
+        <option value="Público">Informe Público</option>
+        <option value="Público">Guía de Procedimientos</option>
+        <option value="Externo">Política Externa</option>
+    </select>
+
+    <button class="button" onclick="checkAccess()">Verificar Acceso</button>
+
+    <div class="result" id="result"></div>
+</div>
+
+<script>
+    function checkAccess() {
+        // Obtener valores seleccionados
+        const employee = document.getElementById("employee").value;
+        const documentLevel = document.getElementById("document").value;
+
+        // Lógica de control de acceso según el rol y el nivel del documento
+        let resultMessage = '';
+
+        switch(employee) {
+            case 'Director Ejecutivo':
+                resultMessage = 'Acceso concedido a todos los documentos.';
+                break;
+            case 'Jefe de Proyectos':
+                if (documentLevel === 'Confidencial' || documentLevel === 'Sensitivo') {
+                    resultMessage = 'Acceso concedido.';
+                } else {
+                    resultMessage = 'Acceso denegado.';
+                }
+                break;
+            case 'Analista':
+                if (documentLevel === 'Restrictivo' || documentLevel === 'Público') {
+                    resultMessage = 'Acceso concedido.';
+                } else {
+                    resultMessage = 'Acceso denegado.';
+                }
+                break;
+            case 'Asistente Administrativo':
+                if (documentLevel === 'Público') {
+                    resultMessage = 'Acceso concedido.';
+                } else {
+                    resultMessage = 'Acceso denegado.';
+                }
+                break;
+            case 'Consultor Externo':
+                if (documentLevel === 'Externo') {
+                    resultMessage = 'Acceso concedido.';
+                } else {
+                    resultMessage = 'Acceso denegado.';
+                }
+                break;
+            default:
+                resultMessage = 'Acceso denegado. Rol no reconocido.';
+                break;
+        }
+
+        // Mostrar resultado
+        const resultDiv = document.getElementById("result");
+        resultDiv.innerHTML = resultMessage;
+        resultDiv.style.color = resultMessage.includes('denegado') ? 'red' : 'green';
+    }
+</script>
+
+</body>
+</html>
